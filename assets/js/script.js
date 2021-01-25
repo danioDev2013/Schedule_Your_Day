@@ -1,16 +1,31 @@
-//create the time blocks
-//color coding, past, present, or future
-//when click, enter event
-//click to save to local storage
+$(".clear-btn").text("Clear!");
 
-//time for current date 
-//loop for rows and columns
-//rows
-//columns
+$( document ).ready(function() {
 
-//append
+    //using moment for the date
+    $("#currentDay").text(moment().format("dddd, MMMM Do"));
 
-//save button
+    for(let i = 9; i < 18; i++){
+        var row = $('<div class="row">' + '</div>')
 
-//clear button
+        var column1 = $('<div class="col-sm-2">' + '</div>');
 
+        var column2 = $('<div class="col-sm-8>' + '</div>');
+
+        var column3 = $('<div class="col-sm-1' + '</div>');
+
+        row.append(column1);
+        row.append(column2);
+        row.append(column3);
+
+        $(".container").append(row);
+        console.log("hi");
+    }
+
+
+
+
+
+
+
+})
