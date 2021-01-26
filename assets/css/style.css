@@ -1,9 +1,19 @@
-body {
+  body {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
     line-height: 1;
   }
-  
+  .container,
+  header {
+  }
+  .card {
+    display: none;
+    margin: 50px auto;
+    text-align: center;
+    transition: 0.3s;
+    width: 80vw;
+    height: 50vw;
+}
   textarea{
     background: transparent;
     border: none;
