@@ -1,76 +1,114 @@
-//clear button text
-$(".clear-btn").text("Clear!");
+
+//using moment for the date change on html
+$("#currentDay").text(moment().format("dddd, MMMM Do"));
+
+//variable for time array
+var timeTextArr = [];
+
 
 $( document ).ready(function() {
 
- 
-    //using moment for the date
-    $("#currentDay").text(moment().format("dddd, MMMM Do"));
-    //current time
-    var currentT = new Date().getHours();
-    currentT = moment(currentT, 'HH:mm:ss').format('h A');
-    console.log(currentT);
+    //clear button, words that will show up on button
+    $(".clear-btn").text("Clear!");
 
-   
+    //checking the array
+    //console.log(timeTextArr);
 
+    //formats the time
+    var currentTime = moment().format('H');
+    //console.log(currentTime);
+    
+    //loop to loop through the rows and columns, i = 9 for the amount of rows, 
+    for(var i = 9; i < 18; i++) {
 
-
-
-
-    //loop to put rows and columns, i is = to 9 rows.
-    for(var i = 9; i < 18; i++){
-
-        //row 1
+        
+        //row 1, adds article tag to each row, class, and id with the associated i 
         var row = $("<article>");
-        row.addClass("row");
+        row.addClass("row time-block");
+        row.attr("id", i);
+        row.attr("data-time", i);
 
-        //column 1, where time will go
+
+        //column 1, time will show up in the column
         var column1 = $("<article>");
-        column1.addClass("col-2 time");
-        //adds time to the first rows
-        var timeShown = $("<p>");
-        timeShown.addClass("hour");
-        timeShown.text(i);
+        column1.addClass("col-2 time-block");
+
+        //paragraph area in column that holds the time text, adds class and id to the paragraph
+        var timeTextShow = $("<p>");
+        timeTextShow.addClass("hour");
+        timeTextShow.attr("data-time", i);
+        timeTextShow.attr("id", i);
+        //pushes the time to the time array, helps to store for color and other functions
+        timeS = i;
+        timeS = parseInt(timeS);
+        timeTextArr.push({"time": timeS});
+        //adds the AM and PM to the text
         if(i < 12) {
-            timeShown.text(i + " AM");
+            timeTextShow.text(i + " AM");
         } else if(i == 12) {
-            timeShown.text(i + " PM");
+            timeTextShow.text(i + " PM");
         } else {
-            timeShown.text(i - 12 + " PM");
+            timeTextShow.text(i - 12 + " PM");
         }
-        column1.append(timeShown);
+        //appends the time to the column so it will show
+        column1.append(timeTextShow);
 
+        //column 2, where user writes event and adds class for past
+        var column2 = $("<article>");
+        column2.addClass("col-8 past");
+        var inputArea = $("<input>");
+        inputArea.attr("placeholder", "Enter Event Here!")
+        inputArea.addClass("textarea textOfUser");
+        inputArea.attr("id", "text" + i);
+        column2.append(inputArea);
 
-        //column 2, where they write event
-        var column2 = $("<input>");
-        column2.addClass("col-8 textArea");
-
-        //column3, save button
+        //column3, save button, with icon
         var column3 = $("<article>");
-        column3.addClass("col-1 save-button")
+        column3.addClass("col-1 save-button");
         var button = $("<button>");
-        button.addClass("saveBtn save");
+        button.addClass("saveBtn save fas fa-save");
+        button.attr("id", i);
+        //appends button
         column3.append(button);
-        //var column3 = $(`<div class="col-1"> <button class="saveBtn" id=${i}><i class="fas fa-save"></i></button>`);
 
-        //append each column to a row
+        //append each column to each row
         row.append(column1);
         row.append(column2);
         row.append(column3);
 
         //appends the row to the container class in the html
         $(".container").append(row);
-        console.log("hi");
-        
+       
     }
 
-    
-    //creating save button
-    $(".saveBtn").text("save");
+    //on click save function
+    $(".saveBtn").on("click", function(){
+        var userInputId = $(this).attr('id');
+        var userText = $(this).parent().siblings().children('.textOfUser').val()
+        localStorage.setItem(userInputId, userText);
 
-   
-    //colors
-  
-    
-    
+    });
+
+    //color function, changes color depending on present or current. It already was set to past.
+    var colorChange = function() {
+        console.log(currentTime);
+        for(var i = 9; i < 18; i++){
+            console.log(currentTime, $("#" + i).data("time"));
+            if($("#" + i).data("time") == currentTime){
+               $("#text" + i).addClass("present");
+            } else if(currentTime < $("#" + i).data("time")) { 
+                $("#text" + i).addClass("future");
+            } 
+        }
+    }
+
+    //call the color change function
+    colorChange();
+
+    //clear button click
+    $(".clear-btn").on("click", function() {
+        $(".textOfUser").val("");
+        
+    });
+
 })

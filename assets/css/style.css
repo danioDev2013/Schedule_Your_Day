@@ -3,23 +3,15 @@
     font-size: 16px;
     line-height: 1;
   }
-  .container,
-  header {
-  }
-  .card {
-    display: none;
-    margin: 50px auto;
-    text-align: center;
-    transition: 0.3s;
-    width: 80vw;
-    height: 50vw;
-}
-  textarea{
+  
+  
+  .textarea{
     background: transparent;
+    height: 100%;
+    width: 100%;
     border: none;
     resize: none;
     color: #000000;
-    border-left: 1px solid black;
     padding: 10px;
   }
   
@@ -39,6 +31,11 @@
     text-align: center;
     border-radius: 15px;
   }
+  .col-8,
+  .col-2 {
+    padding: 0 0 0 0;
+  }
+  
   
   .row {
     white-space: pre-wrap;
@@ -73,6 +70,9 @@
     border-bottom-right-radius: 15px;
     background-color: #06AED5;
     color: white;
+    height: 100%;
+    width: 100%;
+    border-radius: 10%;
   }
   
   .saveBtn i:hover {
@@ -80,7 +80,7 @@
     transition: all .3s ease-in-out;
   }
   .clear-btn {
-    color: rgb(83, 148, 173);
+    color: rgb(147, 83, 173);
   }
 
   @media screen and (max-width: 299px) {
