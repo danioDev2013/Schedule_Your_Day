@@ -68,19 +68,19 @@
     border-left: 1px solid black;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
-    background-color: #06AED5;
+    background-color: #6ad2e9;
     color: white;
     height: 100%;
-    width: 100%;
-    border-radius: 10%;
+    width: 60%;
+    border-radius: 5%;
   }
-  
+
   .saveBtn i:hover {
     font-size: 20px;
     transition: all .3s ease-in-out;
   }
   .clear-btn {
-    color: rgb(147, 83, 173);
+    color: rgb(141, 51, 177);
   }
 
   @media screen and (max-width: 299px) {

@@ -1,114 +1,91 @@
-
-//using moment for the date change on html
-$("#currentDay").text(moment().format("dddd, MMMM Do"));
-
-//variable for time array
-var timeTextArr = [];
-
-
 $( document ).ready(function() {
-
-    //clear button, words that will show up on button
-    $(".clear-btn").text("Clear!");
-
-    //checking the array
-    //console.log(timeTextArr);
-
-    //formats the time
-    var currentTime = moment().format('H');
-    //console.log(currentTime);
     
-    //loop to loop through the rows and columns, i = 9 for the amount of rows, 
-    for(var i = 9; i < 18; i++) {
+    //using moment for the date change on html
+    $("#currentDay").text(moment().format("dddd, MMMM Do"));
 
-        
-        //row 1, adds article tag to each row, class, and id with the associated i 
-        var row = $("<article>");
-        row.addClass("row time-block");
-        row.attr("id", i);
-        row.attr("data-time", i);
+    //clear button, adds the text to the button on the html page
+    var clrBtn = $(".clear-btn")
+    clrBtn.text("Clear All!");
+    
+    //loops through, i is the amount of hours which is the amount of rows
+    for (let i = 5; i < 19; i++) {
 
+      //row
+      var row = $(`<article data-key=${i} id='${i}' class="row time-block">`);
 
-        //column 1, time will show up in the column
-        var column1 = $("<article>");
-        column1.addClass("col-2 time-block");
-
-        //paragraph area in column that holds the time text, adds class and id to the paragraph
-        var timeTextShow = $("<p>");
-        timeTextShow.addClass("hour");
-        timeTextShow.attr("data-time", i);
-        timeTextShow.attr("id", i);
-        //pushes the time to the time array, helps to store for color and other functions
-        timeS = i;
-        timeS = parseInt(timeS);
-        timeTextArr.push({"time": timeS});
-        //adds the AM and PM to the text
-        if(i < 12) {
-            timeTextShow.text(i + " AM");
+      //column1, sets a class to the column for bootstrap
+      var column1 = $('<article class="col-2">'); 
+      //puts a paragraph tag to the column with the time. It sets AM and PM.
+      var formatTime = $("<p>");
+      formatTime.addClass("hour");
+      //if statement to put AM or PM.
+      if(i < 12) {
+        formatTime.text(i + " AM");
         } else if(i == 12) {
-            timeTextShow.text(i + " PM");
+        formatTime.text(i + " PM");
         } else {
-            timeTextShow.text(i - 12 + " PM");
+        formatTime.text(i - 12 + " PM");
         }
-        //appends the time to the column so it will show
-        column1.append(timeTextShow);
+      //appends the time to the column
+      column1.append(formatTime)
 
-        //column 2, where user writes event and adds class for past
-        var column2 = $("<article>");
-        column2.addClass("col-8 past");
-        var inputArea = $("<input>");
-        inputArea.attr("placeholder", "Enter Event Here!")
-        inputArea.addClass("textarea textOfUser");
-        inputArea.attr("id", "text" + i);
-        column2.append(inputArea);
+      //column 2
+      var column2 = $(`<article class="col-8 past"><textarea id=textInput${i} class="textUser textarea" placeholder="Add Event Here... Then click the save icon."></textarea>`);        
+     
+      //column 3
+      var column3 = $(`<div class="col-2"><button class="saveBtn save" id=${i}><i class="far fa-save fa-3x"></i></button>`); 
 
-        //column3, save button, with icon
-        var column3 = $("<article>");
-        column3.addClass("col-1 save-button");
-        var button = $("<button>");
-        button.addClass("saveBtn save fas fa-save");
-        button.attr("id", i);
-        //appends button
-        column3.append(button);
+      
+      // append columns to the row
+      row.append(column1);
+      row.append(column2);
+      row.append(column3);
 
-        //append each column to each row
-        row.append(column1);
-        row.append(column2);
-        row.append(column3);
+      //add rows to the container
+      $(".container").append(row);
 
-        //appends the row to the container class in the html
-        $(".container").append(row);
-       
+      //local storage call with reference to i (hour)
+      getLS(i);
+  }
+
+// changes the color depending on the hour
+function changeColor(){
+    var currntT = new Date().getHours();
+    //get current hours
+    for (var i = 5; i < 19; i++) { 
+    if($(`#` + i).data("key") == currntT){
+        $(`#textInput` + i).addClass( "present");
+    } else if (currntT < $(`#` + i).data("key")) {
+        $(`#textInput` + i).addClass( "future");
     }
-
-    //on click save function
-    $(".saveBtn").on("click", function(){
-        var userInputId = $(this).attr('id');
-        var userText = $(this).parent().siblings().children('.textOfUser').val()
-        localStorage.setItem(userInputId, userText);
-
-    });
-
-    //color function, changes color depending on present or current. It already was set to past.
-    var colorChange = function() {
-        console.log(currentTime);
-        for(var i = 9; i < 18; i++){
-            console.log(currentTime, $("#" + i).data("time"));
-            if($("#" + i).data("time") == currentTime){
-               $("#text" + i).addClass("present");
-            } else if(currentTime < $("#" + i).data("time")) { 
-                $("#text" + i).addClass("future");
-            } 
-        }
     }
+}
 
-    //call the color change function
-    colorChange();
+//change color call
+changeColor();
 
-    //clear button click
-    $(".clear-btn").on("click", function() {
-        $(".textOfUser").val("");
-        
-    });
+//save btn
+var saveBtn = $('.saveBtn');
+//click on function for save button, saves the info to the local storage
+saveBtn.on('click', function(){
+  var evntT = $(this).attr('id');
+  var evntTxt = $(this).parent().siblings().children('.textUser').val();
+  localStorage.setItem(evntT, evntTxt);
+});
 
-})
+
+//clear description and local storage.
+clrBtn.on('click', function(){
+$('.textUser').val("");
+localStorage.clear();
+});
+
+//get the local storage, gets the key from local storage
+function getLS(key) {
+    var eventText = localStorage.getItem(key);
+    if (eventText) {
+        $(`#textInput` + key).text(eventText);
+    }
+  }
+
+});
